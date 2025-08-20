@@ -46,82 +46,198 @@ WeatherlyIQ is a modern, responsive weather application built with React and Tai
 
 ## Project Structure
 
-- `src/` - Main source code directory.
-  - `components/` - Reusable React components (SearchBar, WeatherCard, DarkModeToggle, etc.).
-  - `styles/` - CSS files including animations and Tailwind configuration.
-  - `App.js` - Main application component managing state and API calls.
-  - `index.js` - Entry point rendering the app.
-- `public/` - Static assets and HTML template.
-- `.gitignore` - Specifies files and folders to ignore in Git.
-- `tailwind.config.js` - Tailwind CSS configuration with custom themes and animations.
-- `package-lock.json` - NPM package lock file.
+```
+weatherlyIQ/
+├── README.md
+├── .gitignore
+├── backend/
+│   ├── .gitignore
+│   ├── app.py                 # Flask backend server
+│   ├── weather_data.csv       # Training data for ML models
+│   ├── weather_model_max.pkl  # Trained model for max temperature prediction
+│   └── weather_model_min.pkl  # Trained model for min temperature prediction
+├── frontend/
+│   ├── .gitignore
+│   ├── package.json
+│   ├── package-lock.json
+│   ├── tailwind.config.js
+│   ├── postcss.config.js
+│   ├── README.md
+│   ├── public/
+│   │   ├── index.html
+│   │   ├── weatherlyFavicon.png
+│   │   ├── homeLight1.png
+│   │   ├── homeLight2.png
+│   │   ├── homeDark1.png
+│   │   ├── homeDark2.png
+│   │   ├── resultLight.png
+│   │   ├── resultDark.png
+│   │   ├── aboutLight.png
+│   │   └── aboutDark.png
+│   └── src/
+│       ├── index.js
+│       ├── index.css
+│       ├── App.js
+│       ├── components/
+│       │   ├── About.js
+│       │   ├── AboutIcon.js
+│       │   ├── DarkModeToggle.js
+│       │   ├── ErrorMessage.js
+│       │   ├── Footer.js
+│       │   ├── SearchBar.js
+│       │   └── WeatherCard.js
+│       └── styles/
+│           └── animations.css
+├── build/                     # Production build directory
+└── public/                    # Shared public assets
+```
 
 ## Setup and Installation
 
-1. Clone the repository:
+### Prerequisites
+- Node.js (v14 or higher)
+- Python (v3.7 or higher)
+- npm or yarn package manager
+
+### Backend Setup (Flask API)
+
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
    ```
-   git clone <repository-url>
+
+2. Create a virtual environment (recommended):
+   ```bash
+   python -m venv venv
+   # On Windows:
+   venv\Scripts\activate
+   # On macOS/Linux:
+   source venv/bin/activate
    ```
-2. Navigate to the project directory:
+
+3. Install Python dependencies:
+   ```bash
+   pip install flask flask-cors pandas scikit-learn
    ```
-   cd weatherly
+
+4. Run the Flask backend server:
+   ```bash
+   python app.py
    ```
-3. Install dependencies:
+   
+   The backend server will start on `http://localhost:5000`
+
+### Frontend Setup (React App)
+
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
    ```
+
+2. Install dependencies:
+   ```bash
    npm install
    ```
-4. Create a `.env` file in the root directory and add your OpenWeatherMap API key:
-   ```
+
+3. Create a `.env` file in the frontend root directory and add your OpenWeatherMap API key:
+   ```bash
    REACT_APP_WEATHER_API_KEY=your_api_key_here
    ```
-5. Start the development server:
-   ```
+
+4. Start the development server:
+   ```bash
    npm start
    ```
-6. Open your browser and visit `http://localhost:3000` to use the app.
 
-## Environment Variables (.env)
+5. Open your browser and visit `http://localhost:3000` to use the app.
 
-This project uses a `.env` file located in the root directory to securely manage environment-specific configuration variables such as API keys. The `.env` file should never be committed to version control to protect sensitive information.
+### Running Both Backend and Frontend Together
 
-### What is a `.env` file?
-
-A `.env` file is a plain text file containing key-value pairs of environment variables. These variables are loaded into the application at runtime to configure settings like API keys.
-
-### Typical Variables in `.env`
-
-- `REACT_APP_WEATHER_API_KEY` - Your OpenWeatherMap API key used to fetch weather data.
-
-### How to create the `.env` file
-
-1. In the root directory, create a file named `.env`.
-2. Add the required variables in the format `KEY=VALUE`, for example:
+#### Option 1: Separate Terminal Windows
+1. **Terminal 1** - Backend:
+   ```bash
+   cd backend
+   python app.py
    ```
-   REACT_APP_WEATHER_API_KEY=your_api_key_here
+
+2. **Terminal 2** - Frontend:
+   ```bash
+   cd frontend
+   npm start
    ```
-3. Save the file.
 
-### Security Best Practices
+#### Option 2: Using Concurrently (Optional)
+If you want to run both from a single command, you can install `concurrently`:
 
-- Do not commit your `.env` file to any public repository.
-- Use `.gitignore` to exclude the `.env` file from version control.
-- Keep your API keys secure and rotate them periodically.
+1. Install concurrently globally:
+   ```bash
+   npm install -g concurrently
+   ```
+
+2. Create a root-level package.json with scripts:
+   ```json
+   {
+     "scripts": {
+       "dev": "concurrently \"cd backend && python app.py\" \"cd frontend && npm start\""
+     }
+   }
+   ```
+
+3. Run both with:
+   ```bash
+   npm run dev
+   ```
+
+## Environment Variables
+
+### Backend (.env file in backend/)
+- `FLASK_ENV=development`
+- `FLASK_DEBUG=1`
+- `PORT=5000`
+
+### Frontend (.env file in frontend/)
+- `REACT_APP_WEATHER_API_KEY=your_openweathermap_api_key`
+- `REACT_APP_BACKEND_URL=http://localhost:5000`
 
 ## Usage
 
-- Enter a city name in the search bar or use the microphone button to speak the city name.
-- Click "Search" to fetch weather data.
-- Use the "Detect my location" button to get weather for your current location.
-- Toggle temperature and wind speed units using the buttons on the weather card.
-- Switch between light and dark mode using the toggle button.
-- View next-day temperature predictions powered by machine learning models.
-- Click the info icon to learn more about the app.
+1. **Start the backend server** (Flask API) first
+2. **Start the frontend server** (React app)
+3. **Access the application** at `http://localhost:3000`
+4. **Enter a city name** in the search bar or use the microphone button to speak the city name
+5. **Click "Search"** to fetch weather data
+6. **Use the "Detect my location"** button to get weather for your current location
+7. **Toggle temperature and wind speed units** using the buttons on the weather card
+8. **Switch between light and dark mode** using the toggle button
+9. **View next-day temperature predictions** powered by machine learning models
+10. **Click the info icon** to learn more about the app
 
-## Live Project Link
+## API Endpoints
 
-You can view the live project at: [sharmanishant731.github.io/Weatherly](https://sharmanishant731.github.io/Weatherly)
+### Backend API (Flask)
+- `GET /` - Health check endpoint
+- `GET /predict` - Get next-day temperature predictions
+- `POST /weather` - Get current weather data (if implemented)
 
-> Note: If you are using your mobile phone to view the project, please change the setting to desktop mode for the best viewing experience.
+### Frontend API Calls
+- OpenWeatherMap API for current weather data
+- Backend API for ML predictions
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port already in use**: 
+   - Change the port in backend/app.py or frontend/package.json
+
+2. **CORS errors**: 
+   - Ensure Flask-CORS is installed and configured in backend/app.py
+
+3. **API key issues**: 
+   - Verify your OpenWeatherMap API key is valid and properly set in .env
+
+4. **Python module not found**: 
+   - Install missing dependencies: `pip install -r requirements.txt`
 
 ## Contact
 
