@@ -1,0 +1,42 @@
+/* Root CSS variables for wave animation colors */
+:root {
+  --wave-color-start: #50E3C2; /* Tailwind teal as fallback */
+  --wave-color-end: #4A90E2; /* Tailwind blue as fallback */
+}
+
+/* Dark mode overrides for wave animation colors */
+.dark {
+  --wave-color-start: #ffffff; /* white */
+  --wave-color-end: #888888; /* gray */
+}
+
+/* Keyframes for wave animation scaling and color transition */
+@keyframes wave {
+  0%, 100% {
+    transform: scaleY(1);
+    background-color: var(--wave-color-start);
+  }
+  50% {
+    transform: scaleY(1.5);
+    background-color: var(--wave-color-end);
+  }
+}
+
+/* Class to apply wave animation infinitely with easing */
+.animate-wave {
+  animation: wave 1.2s ease-in-out infinite;
+  transform-origin: center;
+}
+
+/* Animation delay variants for wave animation */
+.animate-wave.delay-0 {
+  animation-delay: 0s;
+}
+
+.animate-wave.delay-200 {
+  animation-delay: 0.2s;
+}
+
+.animate-wave.delay-400 {
+  animation-delay: 0.4s;
+}
